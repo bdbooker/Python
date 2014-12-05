@@ -1,0 +1,54 @@
+#take in up to 4 keywords 
+#open job listings file
+#match the keywords and files and add the points - 8,4,2,1
+#close the file
+#print out the top five picks
+#!/usr/local/bin/python2.7
+
+#!/usr/local/bin/python2.7
+
+import urllib2
+import re
+
+toggle = input("What site would you like to search? " )
+site1 = "craigslist" 
+if toggle == site1:
+	print("You broke my program")
+else: 
+	webfile = urllib2.urlopen('http://jobregister.aas.org/archives/issue?year=2013&month=9')
+	#uploading the webfile
+	numofwords = input("How many key words would you like to search? (1-4) ")
+	#asking the number of keywords
+	def keyworddef(numofwords): #Ask the user for as many inputs as they said they wanted in the previous input
+		keyword = []
+		for times in range(0, numofwords):
+			inputs = raw_input("Enter a term: ")
+			keyword.append(inputs)
+		return keyword
+
+	keyword = keyworddef(numofwords)
+	#allows for all the html mess to be read as plain text	
+	htmlconv = re.compile(r'<[^>]+>')
+
+	#runs regex and parses by Posted
+	for line in webfile:
+		line = htmlconv.sub('', line)
+		if re.search('Posted', line):
+			found = re.split('2013', line)
+		
+	points = [8, 4, 2, 1]
+
+	listing = dict()
+	for line in found: #Adds the points up based on its spot in the keyword list
+		counts = 0
+		for times in range(0, numofwords):
+			if re.search(keyword[times], line, re.IGNORECASE):
+				counts = counts + points[times]
+		listing[line] = counts
+	
+	for item in sorted(listing, key=listing.get):
+			print "The score for this listing is", listing[item]
+			print item, "\n"
+			#Much of my program was inspired by the program D that I found while doing python3
+	webfile.close(); 
+	
